@@ -27,8 +27,6 @@ dockers:
   - image_templates:
     - "ghcr.io/patrickdappollonio/wait-for:{{ .Tag }}"
     - "ghcr.io/patrickdappollonio/wait-for:latest"
-    extra_files:
-    - 'html/'
 changelog:
   sort: asc
   filters:

@@ -59,9 +59,9 @@ spec:
     image: ghcr.io/patrickdappollonio/wait-for:latest
     env:
     - name: POSTGRES_HOST
-      value: "postgres.default.svc.cluster.local:5432"    
+      value: "postgres.default.svc.cluster.local:5432"
     command:
-      - /wait-for    
+      - /wait-for
     args:
       - --host="google.com:443"
       - --host="mysql.example.com:3306"

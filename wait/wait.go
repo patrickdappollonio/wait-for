@@ -2,7 +2,7 @@ package wait
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net"
 	"os"
@@ -39,7 +39,7 @@ func New(hosts []string, step, timeout time.Duration, verbose bool) (*Wait, erro
 		}
 	}
 
-	w.log = log.New(ioutil.Discard, "", 0)
+	w.log = log.New(io.Discard, "", 0)
 
 	if verbose {
 		w.log.SetOutput(os.Stdout)

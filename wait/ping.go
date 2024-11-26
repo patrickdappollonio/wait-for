@@ -31,18 +31,18 @@ func (w *Wait) PingAll() error {
 	}
 }
 
-func (w *Wait) ping(startTime time.Time, host string, wg *sync.WaitGroup) {
+func (w *Wait) ping(startTime time.Time, host host, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	for {
-		conn, err := net.Dial("tcp", host)
+		conn, err := net.Dial(host.GetProtocol(), host.String())
 		if err == nil {
 			conn.Close()
-			w.log.Printf("> up:   %s (after %s)", w.pad(host), time.Since(startTime))
+			w.log.Printf("> up:   %s (after %s)", w.pad(host.String()), time.Since(startTime))
 			return
 		}
 
-		w.log.Printf("> down: %s", w.pad(host))
+		w.log.Printf("> down: %s", w.pad(host.String()))
 		time.Sleep(w.step)
 	}
 }

@@ -1,6 +1,6 @@
 # `wait-for`
 
-A tiny Go application with zero dependencies. Given a number of TCP `host:port` pairs, the app will wait until either all are available or a timeout is reached.
+A tiny Go application with zero dependencies. Given a number of TCP or UDP `host:port` pairs, the app will wait until either all are available or a timeout is reached. `wait-for` supports pinging TCP or UDP hosts, by prefixing the host with `tcp://` or `udp://`, respectively. If no prefix is provided, the app will default to TCP.
 
 Kudos to @vishnubob for the [original implementation in Bash](https://github.com/vishnubob/wait-for-it).
 
@@ -15,11 +15,11 @@ wait-for \
   --timeout 10s
 ```
 
-This will ping both `google.com` on port `443` and `mysql.example.com` on port `3306`. If they both start accepting connections within 10 seconds, the app will exit with a `0` exit code. If either one does not start accepting connections within 10 seconds, the app will exit with a `1` exit code, which will allow you to catch the error in CI/CD environments.
+This will ping both `google.com` on port `443` and `mysql.example.com` on port `3306` via TCP. If they both start accepting connections within 10 seconds, the app will exit with a `0` exit code. If either one does not start accepting connections within 10 seconds, the app will exit with a `1` exit code, which will allow you to catch the error in CI/CD environments.
 
 All the parameters accepted by the application are shown in the help section, as shown below.
 
-```
+```text
 wait-for allows you to wait for a TCP resource to respond to requests.
 
 It does this by performing a TCP connection to the specified host and port. If there's
@@ -36,7 +36,7 @@ Usage:
 Flags:
   -e, --every duration     time to wait between each request attempt against the host (default 1s)
   -h, --help               help for wait-for
-  -s, --host strings       hosts to connect to in the format "host:port"
+  -s, --host strings       hosts to connect to in the format "host:port" with optional protocol prefix (tcp:// or udp://)
   -t, --timeout duration   maximum time to wait for the endpoints to respond before giving up (default 10s)
   -v, --verbose            enable verbose output -- will print every time a request is made
       --version            version for wait-for

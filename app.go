@@ -55,7 +55,7 @@ func root() *cobra.Command {
 		},
 	}
 
-	rootCommand.Flags().StringSliceVarP(&hosts, "host", "s", []string{}, "hosts to connect to in the format \"host:port\"")
+	rootCommand.Flags().StringSliceVarP(&hosts, "host", "s", []string{}, "hosts to connect to in the format \"host:port\" with optional protocol prefix (tcp:// or udp://)")
 	rootCommand.Flags().DurationVarP(&timeout, "timeout", "t", time.Second*10, "maximum time to wait for the endpoints to respond before giving up")
 	rootCommand.Flags().DurationVarP(&step, "every", "e", time.Second*1, "time to wait between each request attempt against the host")
 	rootCommand.Flags().BoolVarP(&verbose, "verbose", "v", false, "enable verbose output -- will print every time a request is made")

@@ -28,6 +28,11 @@ func TestTCPPinger_Bootstrap(t *testing.T) {
 			urlStr:  "http://example.com:80",
 			wantErr: true,
 		},
+		{
+			name:    "No scheme",
+			urlStr:  "example.com:80",
+			wantErr: false,
+		},
 	}
 
 	for _, tt := range tests {

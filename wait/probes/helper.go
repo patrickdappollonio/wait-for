@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 // oneOf returns true if the first argument is equal to any of the
@@ -47,4 +48,17 @@ func doGet(ctx context.Context, client *http.Client, url string) error {
 	}
 
 	return nil
+}
+
+// extractProtocol extracts the protocol from the host string.
+// If no protocol is found, an empty string is returned.
+func extractProtocol(host string) string {
+	// Find if there's a "://" in the host string.
+	// If there is, extract the protocol.
+	// If there isn't, assume it's a hostname and return an empty string.
+	if i := strings.Index(host, "://"); i >= 0 {
+		return host[:i]
+	}
+
+	return ""
 }

@@ -15,6 +15,10 @@ type TCPPinger struct {
 
 // Bootstrap sets up the pinger with the URL.
 func (t *TCPPinger) Bootstrap(host string) error {
+	if proto := extractProtocol(host); proto == "" {
+		host = "tcp://" + host
+	}
+
 	u, err := url.Parse(host)
 	if err != nil {
 		return fmt.Errorf("failed to parse host %q: %v", host, err)
@@ -24,7 +28,7 @@ func (t *TCPPinger) Bootstrap(host string) error {
 		return fmt.Errorf("no host specified for tcp scheme")
 	}
 
-	if !oneOf(u.Scheme, "", "tcp", "tcp4", "tcp6") {
+	if !oneOf(u.Scheme, "tcp", "tcp4", "tcp6") {
 		return fmt.Errorf("invalid scheme for tcp probe: %s", u.Scheme)
 	}
 

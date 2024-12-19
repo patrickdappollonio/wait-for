@@ -181,3 +181,35 @@ func TestDoGet(t *testing.T) {
 		})
 	}
 }
+
+func Test_extractProtocol(t *testing.T) {
+	tests := []struct {
+		name string
+		host string
+		def  string
+		want string
+	}{
+		{
+			name: "No protocol",
+			host: "example.com",
+			want: "",
+		},
+		{
+			name: "TCP protocol",
+			host: "tcp://example.com",
+			want: "tcp",
+		},
+		{
+			name: "HTTP protocol",
+			host: "http://example.com",
+			want: "http",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := extractProtocol(tt.host); got != tt.want {
+				t.Errorf("extractProtocol() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

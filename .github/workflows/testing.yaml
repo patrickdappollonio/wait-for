@@ -1,7 +1,6 @@
-name: Testing
+name: Testing Commit
 on:
   push:
-  pull_request:
 
 jobs:
   test-app:
@@ -10,11 +9,11 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
       - name: Test application
         run: go test ./...
-      - name: Compile application
-        run: go build

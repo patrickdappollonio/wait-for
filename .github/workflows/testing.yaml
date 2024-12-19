@@ -16,5 +16,3 @@ jobs:
           go-version-file: go.mod
       - name: Test application
         run: go test ./...
-      - name: Compile application
-        run: go build

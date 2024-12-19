@@ -20,18 +20,33 @@ This will ping both `google.com` on port `443` and `mysql.example.com` on port `
 All the parameters accepted by the application are shown in the help section, as shown below.
 
 ```text
-wait-for allows you to wait for a TCP resource to respond to requests.
+wait-for allows you to wait for a resource to respond to requests.
 
-It does this by performing a TCP connection to the specified host and port. If there's
-no resource behind it and the connection cannot be established, the request is retried
-until either the timeout is reached or the resource becomes available.
+It does this by performing a connection to the specified host and port. If
+there's no resource behind it and the connection cannot be established, the
+request is retried until either the timeout is reached or the resource becomes
+available.
 
-By default, the standard timeout is 10 seconds.
+Each protocol defines its own way of checking for the resource. For example, a
+TCP connection will attempt to connect to the host and port specified, while a
+MySQL connection will attempt to connect to the host and port, and then ping the
+database.
+
+By default, the standard timeout is 10 seconds but it can be customized for all
+requests. The time between each request is 1 second, but this can also be
+customized.
 
 For documentation, visit: https://github.com/patrickdappollonio/wait-for.
 
 Usage:
   wait-for [flags]
+
+Examples:
+  wait-for -s localhost:80                             wait for a web server to accept connections
+  wait-for -s mysql.example.local:3306                 wait for a MySQL database to accept connections
+  wait-for -s udp://localhost:53                       wait for a DNS server to accept connections
+  wait-for --host localhost:80 --host localhost:81     wait for multiple resources to accept connections
+  wait-for --host mysql://localhost:3306               wait until a MySQL database is ready to accept connections and responds to pings
 
 Flags:
   -e, --every duration     time to wait between each request attempt against the host (default 1s)

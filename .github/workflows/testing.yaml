@@ -1,4 +1,4 @@
-name: Testing
+name: Testing Commit
 on:
   push:
   pull_request:

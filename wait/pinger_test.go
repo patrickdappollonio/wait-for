@@ -1,8 +1,6 @@
 package wait
 
 import (
-	"net/url"
-	"reflect"
 	"testing"
 )
 
@@ -10,25 +8,40 @@ func TestParseHost(t *testing.T) {
 	tests := []struct {
 		name    string
 		hostStr string
-		want    *url.URL
+		want    *matchedURLItem
 		wantErr bool
 	}{
 		{
-			name:    "No scheme",
+			name:    "Valid TCP URL",
 			hostStr: "example.com",
-			want:    &url.URL{Scheme: "tcp", Host: "example.com"},
+			want: &matchedURLItem{
+				Raw:    "tcp://example.com",
+				Pinger: pingerRegistry["tcp"](),
+			},
 			wantErr: false,
 		},
 		{
-			name:    "With scheme",
+			name:    "Valid HTTP URL",
 			hostStr: "http://example.com",
-			want:    &url.URL{Scheme: "http", Host: "example.com"},
+			want: &matchedURLItem{
+				Raw:    "http://example.com",
+				Pinger: pingerRegistry["http"](),
+			},
 			wantErr: false,
 		},
 		{
-			name:    "Invalid URL",
+			name:    "Invalid URL without scheme",
 			hostStr: "://example.com",
-			want:    nil,
+			wantErr: true,
+		},
+		{
+			name:    "Invalid URL with unknown scheme",
+			hostStr: "unknown://example.com",
+			wantErr: true,
+		},
+		{
+			name:    "Invalid URL with no scheme and no host",
+			hostStr: "://",
 			wantErr: true,
 		},
 	}
@@ -40,8 +53,13 @@ func TestParseHost(t *testing.T) {
 				t.Errorf("parseHost() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("parseHost() = %v, want %v", got, tt.want)
+
+			if !tt.wantErr && got.Raw != tt.want.Raw {
+				t.Errorf("parseHost() got = %v, want %v", got.Raw, tt.want.Raw)
+			}
+
+			if !tt.wantErr && got.Pinger == nil {
+				t.Errorf("parseHost() got Pinger = nil, want non-nil")
 			}
 		})
 	}

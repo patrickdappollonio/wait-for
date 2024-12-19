@@ -1,6 +1,6 @@
 # `wait-for`
 
-A tiny Go application with zero dependencies. Given a number of TCP or UDP `host:port` pairs, the app will wait until either all are available or a timeout is reached. `wait-for` supports pinging TCP or UDP hosts, by prefixing the host with `tcp://` or `udp://`, respectively. If no prefix is provided, the app will default to TCP.
+A Go application with zero dependencies. Given a number of hosts, the app will wait until either all are available or a timeout is reached. `wait-for` supports pinging several host types (see [supported probes](#supported-probes)), by prefixing the host with a specific protocol. If no prefix is provided, the app will default to TCP.
 
 Kudos to @vishnubob for the [original implementation in Bash](https://github.com/vishnubob/wait-for-it).
 
@@ -19,19 +19,36 @@ This will ping both `google.com` on port `443` and `mysql.example.com` on port `
 
 All the parameters accepted by the application are shown in the help section, as shown below.
 
+### Command-line help
+
 ```text
-wait-for allows you to wait for a TCP resource to respond to requests.
+wait-for allows you to wait for a resource to respond to requests.
 
-It does this by performing a TCP connection to the specified host and port. If there's
-no resource behind it and the connection cannot be established, the request is retried
-until either the timeout is reached or the resource becomes available.
+It does this by performing a connection to the specified host and port. If
+there's no resource behind it and the connection cannot be established, the
+request is retried until either the timeout is reached or the resource becomes
+available.
 
-By default, the standard timeout is 10 seconds.
+Each protocol defines its own way of checking for the resource. For example, a
+TCP connection will attempt to connect to the host and port specified, while a
+MySQL connection will attempt to connect to the host and port, and then ping the
+database.
+
+By default, the standard timeout is 10 seconds but it can be customized for all
+requests. The time between each request is 1 second, but this can also be
+customized.
 
 For documentation, visit: https://github.com/patrickdappollonio/wait-for.
 
 Usage:
   wait-for [flags]
+
+Examples:
+  wait-for -s localhost:80                             wait for a web server to accept connections
+  wait-for -s mysql.example.local:3306                 wait for a MySQL database to accept connections
+  wait-for -s udp://localhost:53                       wait for a DNS server to accept connections
+  wait-for --host localhost:80 --host localhost:81     wait for multiple resources to accept connections
+  wait-for --host mysql://localhost:3306               wait until a MySQL database is ready to accept connections and responds to pings
 
 Flags:
   -e, --every duration     time to wait between each request attempt against the host (default 1s)
@@ -41,6 +58,18 @@ Flags:
   -v, --verbose            enable verbose output -- will print every time a request is made
       --version            version for wait-for
 ```
+
+### Supported probes
+
+The following probes are supported:
+
+* [TCP probe](docs/tcp-probe.md)
+* [UDP probe](docs/udp-probe.md)
+* [HTTP & HTTPS probe](docs/http-https-probe.md)
+* [MySQL probe](docs/mysql-probe.md) *(experimental)*
+* [PostgreSQL probe](docs/postgres-probe.md) *(experimental)*
+
+If you're interested in adding a new probe, please refer to the [Adding new probes documentation](docs/readme.md#adding-new-probes).
 
 ### Usage with Kubernetes
 
@@ -71,3 +100,15 @@ spec:
   - name: nginx-container
     image: nginx
 ```
+
+### Validating connectivity to a MySQL or Postgres database
+
+If you want to validate that a MySQL database is up and running, you can use the `mysql://` or `postgres://` prefix. This will attempt to connect to the host and port specified, and then ping the database as well. This is different than the default TCP probe, which only checks if the server is accepting connections on the specified port.
+
+For more details, check the [MySQL probe documentation](docs/mysql-probe.md) and the [PostgreSQL probe documentation](docs/postgres-probe.md).
+
+### Validating connectivity to an HTTP or HTTPS endpoint
+
+If you want to validate that an HTTP or HTTPS endpoint is up and running, you can use the `http://` or `https://` prefix. This will attempt to connect to the host and port specified, and then perform an HTTP GET request to the root path (`/`) of the server where the server must respond within 1 second. This is different than the default TCP probe, which only checks if the server is accepting connections on the specified port.
+
+For HTTPS requests, the certificate is also validated. For more details, check the [HTTP & HTTPS probe documentation](docs/http-https-probe.md).

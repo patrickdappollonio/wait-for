@@ -19,6 +19,8 @@ This will ping both `google.com` on port `443` and `mysql.example.com` on port `
 
 All the parameters accepted by the application are shown in the help section, as shown below.
 
+### Command-line help
+
 ```text
 wait-for allows you to wait for a resource to respond to requests.
 
@@ -59,11 +61,15 @@ Flags:
 
 ### Supported probes
 
+The following probes are supported:
+
 * [TCP probe](docs/tcp-probe.md)
 * [UDP probe](docs/udp-probe.md)
 * [HTTP & HTTPS probe](docs/http-https-probe.md)
 * [MySQL probe](docs/mysql-probe.md) *(experimental)*
 * [PostgreSQL probe](docs/postgres-probe.md) *(experimental)*
+
+If you're interested in adding a new probe, please refer to the [Adding new probes documentation](docs/readme.md#adding-new-probes).
 
 ### Usage with Kubernetes
 
@@ -106,9 +112,3 @@ For more details, check the [MySQL probe documentation](docs/mysql-probe.md) and
 If you want to validate that an HTTP or HTTPS endpoint is up and running, you can use the `http://` or `https://` prefix. This will attempt to connect to the host and port specified, and then perform an HTTP GET request to the root path (`/`) of the server where the server must respond within 1 second. This is different than the default TCP probe, which only checks if the server is accepting connections on the specified port.
 
 For HTTPS requests, the certificate is also validated. For more details, check the [HTTP & HTTPS probe documentation](docs/http-https-probe.md).
-
-### Adding custom probes
-
-If you're a Go developer and want to add a new probe, you can do so by implementing the `Probe` interface.
-
-Complete instructions are available in the [Adding new probes documentation](docs/readme.md#adding-new-probes).

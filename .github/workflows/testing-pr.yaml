@@ -8,7 +8,7 @@ concurrency:
 
 jobs:
   test-app:
-    name: Test Application
+    name: Test Goreleaser Application
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository

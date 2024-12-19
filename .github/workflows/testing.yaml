@@ -1,7 +1,6 @@
 name: Testing Commit
 on:
   push:
-  pull_request:
 
 jobs:
   test-app:

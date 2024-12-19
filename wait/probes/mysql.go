@@ -16,12 +16,14 @@ type MySQLPinger struct {
 }
 
 // Bootstrap sets up the pinger with the URL.
-func (m *MySQLPinger) Bootstrap(u *url.URL) error {
-	// Construct DSN from URL. For example:
-	// mysql://user:pass@tcp(host:port)/dbname
-	// We'll assume the URL is provided in a usable format.
+// Expected URL format: mysql://user:password@host:port/dbname
+func (m *MySQLPinger) Bootstrap(host string) error {
+	u, err := url.Parse(host)
+	if err != nil {
+		return fmt.Errorf("failed to parse host %q: %v", host, err)
+	}
 
-	host := u.Host
+	hostname := u.Host
 	user := u.User.Username()
 	pass, _ := u.User.Password()
 
@@ -30,7 +32,7 @@ func (m *MySQLPinger) Bootstrap(u *url.URL) error {
 	}
 
 	// We use the "tcp(host:port)" format for MySQL driver.
-	m.DSN = fmt.Sprintf("%s:%s@tcp(%s)/", user, pass, host)
+	m.DSN = fmt.Sprintf("%s:%s@tcp(%s)/", user, pass, hostname)
 	return nil
 }
 

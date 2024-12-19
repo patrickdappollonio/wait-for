@@ -14,10 +14,20 @@ type UDPPinger struct {
 }
 
 // Bootstrap sets up the pinger with the URL.
-func (u *UDPPinger) Bootstrap(url *url.URL) error {
+func (u *UDPPinger) Bootstrap(host string) error {
+	url, err := url.Parse(host)
+	if err != nil {
+		return fmt.Errorf("failed to parse host %q: %v", host, err)
+	}
+
 	if url.Host == "" {
 		return fmt.Errorf("no host specified for udp scheme")
 	}
+
+	if !oneOf(url.Scheme, "udp", "udp4", "udp6") {
+		return fmt.Errorf("invalid scheme for udp probe: %s", url.Scheme)
+	}
+
 	u.Host = url.Host
 	return nil
 }

@@ -1,6 +1,6 @@
 # `wait-for`
 
-A tiny Go application with zero dependencies. Given a number of TCP or UDP `host:port` pairs, the app will wait until either all are available or a timeout is reached. `wait-for` supports pinging TCP or UDP hosts, by prefixing the host with `tcp://` or `udp://`, respectively. If no prefix is provided, the app will default to TCP.
+A Go application with zero dependencies. Given a number of hosts, the app will wait until either all are available or a timeout is reached. `wait-for` supports pinging several host types (see [supported probes](#supported-probes)), by prefixing the host with a specific protocol. If no prefix is provided, the app will default to TCP.
 
 Kudos to @vishnubob for the [original implementation in Bash](https://github.com/vishnubob/wait-for-it).
 
@@ -57,6 +57,14 @@ Flags:
       --version            version for wait-for
 ```
 
+### Supported probes
+
+* [TCP probe](docs/tcp-probe.md)
+* [UDP probe](docs/udp-probe.md)
+* [HTTP & HTTPS probe](docs/http-https-probe.md)
+* [MySQL probe](docs/mysql-probe.md) *(experimental)*
+* [PostgreSQL probe](docs/postgres-probe.md) *(experimental)*
+
 ### Usage with Kubernetes
 
 Simply use this tool as an `initContainer` before your application runs, and validate whether your databases or any TCP-accessible resource (such as websites, too) are up and running, or fail early with proper knowledge of the situation.
@@ -86,3 +94,21 @@ spec:
   - name: nginx-container
     image: nginx
 ```
+
+### Validating connectivity to a MySQL or Postgres database
+
+If you want to validate that a MySQL database is up and running, you can use the `mysql://` or `postgres://` prefix. This will attempt to connect to the host and port specified, and then ping the database as well. This is different than the default TCP probe, which only checks if the server is accepting connections on the specified port.
+
+For more details, check the [MySQL probe documentation](docs/mysql-probe.md) and the [PostgreSQL probe documentation](docs/postgres-probe.md).
+
+### Validating connectivity to an HTTP or HTTPS endpoint
+
+If you want to validate that an HTTP or HTTPS endpoint is up and running, you can use the `http://` or `https://` prefix. This will attempt to connect to the host and port specified, and then perform an HTTP GET request to the root path (`/`) of the server where the server must respond within 1 second. This is different than the default TCP probe, which only checks if the server is accepting connections on the specified port.
+
+For HTTPS requests, the certificate is also validated. For more details, check the [HTTP & HTTPS probe documentation](docs/http-https-probe.md).
+
+### Adding custom probes
+
+If you're a Go developer and want to add a new probe, you can do so by implementing the `Probe` interface.
+
+Complete instructions are available in the [Adding new probes documentation](docs/readme.md#adding-new-probes).

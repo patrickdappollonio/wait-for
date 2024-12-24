@@ -21,3 +21,14 @@ wait-for --host "https://localhost:443"
 The HTTPS probe (that is, where a target host is configured to use `https://` protocol) will attempt to validate the certificate chain and the hostname. If the certificate chain is invalid or the hostname doesn't match, the probe will exit with an error and the resource will be considered unavailable.
 
 A valid HTTPS request on resources with custom certificates will require you to provide the CA certificate to the probe. By default, any certs stored in `/etc/ssl/certs/ca-certificates.crt` will be used to validate the connection.
+
+> [!WARNING]  
+> `wait-for`'s container does not come with any certificates. You must bring your own:
+> ```
+> docker run --rm \
+>   -v /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates:ro \
+>   ghcr.io/patrickdappollonio/wait-for:v1.2.0 \
+>   --host https://google.com \
+>   --verbose
+> ```
+> The example above mounts the local machine's certificate authorities inside the container.

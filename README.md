@@ -4,6 +4,33 @@ A Go application with zero dependencies. Given a number of hosts, the app will w
 
 Kudos to @vishnubob for the [original implementation in Bash](https://github.com/vishnubob/wait-for-it).
 
+### Installation
+
+There are three ways to use `wait-for`: as a [Docker container](#container-image), as a [standalone binary](#standalone-binary), or [via Homebrew](#homebrew). The Docker container is the easiest way to use it, especially in Kubernetes environments.
+
+#### Container image
+
+The container has multiple versions: there's always a specific tag in the format `major.minor.patch` version, but it's recommended to use the `major` version tag, which will always point to the latest stable version with no risk of breaking changes:
+
+```bash
+ghcr.io/patrickdappollonio/wait-for:latest # maps to latest version
+ghcr.io/patrickdappollonio/wait-for:v2     # maps to version 2 (recommended)
+```
+
+For all available images, see [Packages](https://github.com/users/patrickdappollonio/packages/container/package/wait-for).
+
+#### Standalone binary
+
+Download the latest release from our [releases page](https://github.com/patrickdappollonio/wait-for/releases/latest) and place it in your `$PATH`.
+
+#### Homebrew
+
+Install it using a Homebrew tap:
+
+```bash
+brew install patrickdappollonio/tap/wait-for
+```
+
 ### Usage
 
 The easiest way is to provide a list of `host:port` pairs and configure a timeout:

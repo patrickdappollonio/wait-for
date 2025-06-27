@@ -3,7 +3,7 @@ module github.com/patrickdappollonio/wait-for
 go 1.24
 
 require (
-	github.com/go-sql-driver/mysql v1.9.2
+	github.com/go-sql-driver/mysql v1.9.3
 	github.com/jackc/pgx/v5 v5.7.4
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1

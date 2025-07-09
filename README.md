@@ -1,5 +1,7 @@
 # `wait-for`
 
+[![Github Downloads](https://img.shields.io/github/downloads/patrickdappollonio/wait-for/total?color=orange&label=github%20downloads)](https://github.com/patrickdappollonio/wait-for/releases)
+
 A Go application with zero dependencies. Given a number of hosts, the app will wait until either all are available or a timeout is reached. `wait-for` supports pinging several host types (see [supported probes](#supported-probes)), by prefixing the host with a specific protocol. If no prefix is provided, the app will default to TCP.
 
 Kudos to @vishnubob for the [original implementation in Bash](https://github.com/vishnubob/wait-for-it).

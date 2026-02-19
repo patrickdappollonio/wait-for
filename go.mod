@@ -7,7 +7,7 @@ require (
 	github.com/jackc/pgx/v5 v5.8.0
 	github.com/spf13/cobra v1.10.1
 	github.com/spf13/viper v1.20.1
-	golang.org/x/sync v0.17.0
+	golang.org/x/sync v0.19.0
 )
 
 require (

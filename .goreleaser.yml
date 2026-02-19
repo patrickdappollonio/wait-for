@@ -32,52 +32,20 @@ checksum:
   name_template: "checksums.txt"
 snapshot:
   version_template: "{{ incpatch .Version }}-next"
-dockers:
-  - image_templates:
-      - "ghcr.io/patrickdappollonio/wait-for:{{ .Tag }}-amd64"
-    goos: linux
-    goarch: amd64
-    use: buildx
-    build_flag_templates:
-      - "--platform=linux/amd64"
-      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
-      - "--label=org.opencontainers.image.description={{ .ProjectName }} version {{ .Version }}. See release notes at https://github.com/patrickdappollonio/{{ .ProjectName }}/releases/tag/v{{ .RawVersion }}"
-      - "--label=org.opencontainers.image.url=https://github.com/patrickdappollonio/{{ .ProjectName }}"
-      - "--label=org.opencontainers.image.source=https://github.com/patrickdappollonio/{{ .ProjectName }}"
-      - "--label=org.opencontainers.image.version={{ .Version }}"
-      - '--label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}'
-      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
-    extra_files:
-      - extras/ca-certificates.crt
-  - image_templates:
-      - "ghcr.io/patrickdappollonio/wait-for:{{ .Tag }}-arm64"
-    goos: linux
-    goarch: arm64
-    use: buildx
-    build_flag_templates:
-      - "--platform=linux/arm64"
-      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
-      - "--label=org.opencontainers.image.description={{ .ProjectName }} version {{ .Version }}. See release notes at https://github.com/patrickdappollonio/{{ .ProjectName }}/releases/tag/v{{ .RawVersion }}"
-      - "--label=org.opencontainers.image.url=https://github.com/patrickdappollonio/{{ .ProjectName }}"
-      - "--label=org.opencontainers.image.source=https://github.com/patrickdappollonio/{{ .ProjectName }}"
-      - "--label=org.opencontainers.image.version={{ .Version }}"
-      - '--label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}'
-      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
-    extra_files:
-      - extras/ca-certificates.crt
-docker_manifests:
-  - name_template: "ghcr.io/patrickdappollonio/wait-for:v{{ .RawVersion }}"
-    image_templates:
-      - "ghcr.io/patrickdappollonio/wait-for:{{ .Tag }}-amd64"
-      - "ghcr.io/patrickdappollonio/wait-for:{{ .Tag }}-arm64"
-  - name_template: "ghcr.io/patrickdappollonio/wait-for:v{{ .Major }}"
-    image_templates:
-      - "ghcr.io/patrickdappollonio/wait-for:{{ .Tag }}-amd64"
-      - "ghcr.io/patrickdappollonio/wait-for:{{ .Tag }}-arm64"
-  - name_template: "ghcr.io/patrickdappollonio/wait-for:latest"
-    image_templates:
-      - "ghcr.io/patrickdappollonio/wait-for:{{ .Tag }}-amd64"
-      - "ghcr.io/patrickdappollonio/wait-for:{{ .Tag }}-arm64"
+
+dockers_v2:
+  - images:
+      - "{{ .Env.DOCKER_IMAGE_NAME }}"
+    dockerfile: Dockerfile
+    tags:
+      - "v{{ .RawVersion }}"
+      - "v{{ .Major }}.{{ .Minor }}"
+      - "v{{ .Major }}"
+      - "latest"
+    platforms:
+      - linux/amd64
+      - linux/arm64
+
 changelog:
   sort: asc
   filters:

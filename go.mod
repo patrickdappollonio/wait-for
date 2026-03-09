@@ -1,13 +1,13 @@
 module github.com/patrickdappollonio/wait-for
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/jackc/pgx/v5 v5.8.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
-	golang.org/x/sync v0.19.0
+	golang.org/x/sync v0.20.0
 )
 
 require (

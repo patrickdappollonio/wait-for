@@ -13,8 +13,6 @@ builds:
     ignore:
       - goos: windows
         goarch: arm
-      - goos: darwin
-        goarch: arm
     tags:
       - netgo
     flags:
